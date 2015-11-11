@@ -1,7 +1,3 @@
 require "capybara_turbolinks/version"
+require 'capybara_turbolinks/engine' if defined?(Rails)
 
-module CapybaraTurbolinks
-  # Your code goes here...
-  class Engine < Rails::Engine
-  end
-end
