@@ -1,0 +1,7 @@
+<% if Rails.env.test? %>
+$(document).on 'page:fetch', ->
+  $('body').removeClass('page--complete').addClass('page--fetch')
+
+$(document).on 'page:partial-load, page:load', ->
+  $('body').removeClass('page--fetch').addClass('page--complete')
+<% end %>
