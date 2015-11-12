@@ -6,7 +6,7 @@ module CapybaraTurbolinks
 
   module ::Capybara
     module Node
-      class Base 
+      module Actions 
         class_eval do
           def click_turbolink(*args)
             click_link(*args)

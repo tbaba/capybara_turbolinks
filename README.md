@@ -1,8 +1,14 @@
-# CapybaraTurbolinks
+# Capybara Turbolinks
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capybara_turbolinks`. To experiment with that code, run `bin/console` for an interactive prompt.
+Extends Capybara with methods that mitigate race conditions introduced by Turbolinks caching.
 
-TODO: Delete this and the text above, and describe your gem
+Turbolinks is a page loading mechanism introduced in Rails 4.  It's default behaviour is to cache pages on the client side, so that page loading appears extremely fast.  This caching (and Turbolinks itself) can be problematic; the shopify team decided to [disable caching entirely](https://github.com/rails/turbolinks/issues/551).  We decided to keep the page caching, because it was so fast.  However, we experienced race conditions in our integration tests. 
+
+From a Capybara and integration test point of view, the caching is problematic because it loads the page twice; once with the cached page, and a second time with the actual page from the server.
+
+This causes issues with integration tests that block until they see certain page content or selectors, because the integration tests continue before the *actual* page has been loaded from the server.
+
+This gem's solution is to add a small amount of JavaScript code in the test environment that adds and removes classes to the body tag that correspond to the Turbolinks page lifecycle.  This allows us to use Capybara #has_css? to block until we have detected that the Turbolinks request is complete.
 
 ## Installation
 
@@ -22,7 +28,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+This gem extends Capybara by adding two additional methods:
+
+```ruby
+Capybara::Node::Actions#click_turbolink
+```
+
+and
+
+```ruby
+Capybara::Node::Element#turboclick
+``` 
+  
+When you are clicking a link that triggers turbolinks, you will need to use one of the above methods.  For example:
+
+```ruby
+  visit root_path
+  click_turbolink 'View all deals'
+```
+
+Or when you are finding an element to click on:
+
+```ruby
+  visit root_path
+  find('a.all-deals').turboclick
+```
 
 ## Development
 
@@ -32,8 +62,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/capybara_turbolinks.
-
+Bug reports and pull requests are welcome on GitHub at https://github.com/Loft47/capybara_turbolinks.
 
 ## License
 
