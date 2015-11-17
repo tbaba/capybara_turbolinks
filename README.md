@@ -15,7 +15,7 @@ This gem's solution is to add a small amount of JavaScript code in the test envi
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'capybara_turbolinks'
+gem 'capybara_turbolinks', group: :test
 ```
 
 And then execute:
@@ -25,6 +25,24 @@ And then execute:
 Or install it yourself as:
 
     $ gem install capybara_turbolinks
+
+This gem requires the inclusion of some JavaScript code.  Since the gem is in the :test group in the Gemfile, you'll have to conditionally include the JavaScript depending on the environment.  The easiest way to do this is to rename your application.js file to application.js.erb (or application.coffee.erb) and include a guard for the asset like so:
+
+`app/assets/application.js.erb`
+```erb
+<% if Rails.env.test? %>
+ <%= require_asset 'capybara_turbolinks.js' %>
+<% end %>
+```
+
+Otherwise, if you've installed the gem in all environments you can include the JavaScript normally:
+
+`app/assets/application.js`
+```javascript
+//= require capybara_turbolinks
+```
+
+This gem actually check the environment anyway, so even if you include the JavaScript in all environments it will only exist in the test environment.
 
 ## Usage
 
