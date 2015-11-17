@@ -28,8 +28,9 @@ Or install it yourself as:
 
 This gem requires the inclusion of some JavaScript code.  Since the gem is in the :test group in the Gemfile, you'll have to conditionally include the JavaScript depending on the environment.  The easiest way to do this is to rename your application.js file to application.js.erb (or application.coffee.erb) and include a guard for the asset like so:
 
-`app/assets/application.js.erb`:
 ```erb
+# app/assets/application.js.erb
+
 <% if Rails.env.test? %>
  <%= require_asset 'capybara_turbolinks.js' %>
 <% end %>
@@ -37,8 +38,9 @@ This gem requires the inclusion of some JavaScript code.  Since the gem is in th
 
 Otherwise, if you've installed the gem in all environments you can include the JavaScript normally:
 
-`app/assets/application.js`:
 ```javascript
+// app/assets/application.js
+
 //= require capybara_turbolinks
 ```
 
