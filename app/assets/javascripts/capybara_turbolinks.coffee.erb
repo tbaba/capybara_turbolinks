@@ -1,7 +1,7 @@
 <% if Rails.env.test? %>
-$(document).on 'page:fetch', ->
+$(document).on 'page:fetch, turbolinks:request-start', ->
   $('body').removeClass('page--complete').addClass('page--fetch')
 
-$(document).on 'page:partial-load, page:load', ->
+$(document).on 'page:partial-load, page:load, turbolinks:load', ->
   $('body').removeClass('page--fetch').addClass('page--complete')
 <% end %>
